@@ -25,18 +25,30 @@ public class UserService {
 		Optional<User> obj = userRepository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException());
 	}
-	
+
 	public User insert(User obj) {
 		return userRepository.insert(obj);
 	}
-	
+
 	public void delete(String id) {
 		findById(id);
 		userRepository.deleteById(id);
 	}
-	
+
+	public User update(User user) {
+		User updatedUser = findById(user.getId());
+		updateData(updatedUser, user);
+
+		return userRepository.save(updatedUser);
+	}
+
+	private void updateData(User updatedUser, User user) {
+		updatedUser.setName(user.getName());
+		updatedUser.setEmail(user.getEmail());
+	}
+
 	public User fromDTO(UserDTO objDTO) {
 		return new User(objDTO.getId(), objDTO.getName(), objDTO.getEmail());
 	}
-	
+
 }
